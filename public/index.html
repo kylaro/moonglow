@@ -4,40 +4,21 @@
   <title>moonglow</title>
 </head>
 
-<img id="img1" src="/images/moonglow_background.png">
-<a href="info"><img id="img2" src="/images/moonglow_moon.png" href="google.com"></a>
+<img id="sun" src="/images/moonglow_background.png">
+<img id="glow" src="/images/moonglow_glow.png">
+<a href="info"><img id="moon" src="/images/moonglow_noglow.png" href="google.com"></a>
 
 
 
 <h1 id="out">
-lol
+  lol
 </h1>
 
 
 <style>
 
 
-
-  #div1 {
-    --x: 0px;
-    --y: 0px;
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-
-
-  }
-  #div2 {
-    --x: 0px;
-    --y: 0px;
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-
-  }
-
-
-  #img1 {
+  #sun {
     --x: 0px;
     --y: 0px;
 
@@ -47,7 +28,22 @@ lol
     left: var(--x);
     top: var(--y);
   }
-  #img2 {
+
+  #glow {
+    --x: 0px;
+    --y: 0px;
+    --w: 0px;
+    --h: 0px;
+    position: absolute;
+    width: var(--w);
+    height: var(--h);
+    left: var(--x);
+    top: var(--y);
+
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  #moon {
     --x: 0px;
     --y: 0px;
 
@@ -68,8 +64,10 @@ lol
 
 
 <script>
-  const el = document.querySelector("#img1");
-  const el2 = document.querySelector("#img2");
+  const el = document.querySelector("#sun");
+  const el2 = document.querySelector("#moon");
+  const el3 = document.querySelector("#glow");
+
 
   var width = window.innerWidth
           || document.documentElement.clientWidth
@@ -79,18 +77,45 @@ lol
           || document.documentElement.clientHeight
           || document.body.clientHeight;
 
+  var size = 0
+  var count = 0
+  var big = 60
+  var px = 0
+  var py = 0
   document.addEventListener("mousemove", (e) => {
 
-    var px = (e.pageX/width-0.5)*2;
-    var py = (e.pageY/height-0.5)*2;
+    px = (e.pageX/width-0.5)*2;
+    py = (e.pageY/height-0.5)*2;
 
-    document.getElementById("out").innerHTML = px+"x  " + py+"y"
 
-    el.style.setProperty('--x', (px)*4 + "px");
-    el.style.setProperty('--y', (py)*4 + "px");
-    el2.style.setProperty('--x', (px)*15 + "px");
-    el2.style.setProperty('--y', (py)*15 + "px");
+    el.style.setProperty('--x', (px)*10 + "px");
+    el.style.setProperty('--y', (py)*10 + "px");
+    el2.style.setProperty('--x', (px)*35 + "px");
+    el2.style.setProperty('--y', (py)*35 + "px");
+
+
   });
+
+
+  var anim = setInterval(()=>{
+    count+=0.035; // Control the speed of animation here
+
+    size = 60*Math.sin(count%(2*Math.PI))
+
+    var tw = 140+size
+    var th= 140+size
+
+    el3.style.setProperty('--w', tw + "%")
+    el3.style.setProperty('--h', th + "%")
+
+    el3.style.setProperty('--x', (px)*35/width+50+"%");
+    el3.style.setProperty('--y', (py)*35/height+50+"%");
+
+
+    document.getElementById("out").innerHTML = "count = " + count;
+
+
+  },10)
 
 
 </script>
