@@ -4,15 +4,13 @@
   <title>moonglow</title>
 </head>
 
-<img id="sun" src="/images/moonglow_background.png">
-<img id="glow" src="/images/moonglow_glow.png">
-<a href="info"><img id="moon" src="/images/moonglow_noglow.png" href="google.com"></a>
+<img id="sun" src="/images/moonglow_sun_1080.png">
+<img id="stars" src="/images/moonglow_stars_1080.png">
+<img id="vignette" src="/images/moonglow_vignette_1080.png">
+<img id="glow" src="/images/moonglow_glow_1080.png">
+<img id="moon" src="/images/moonglow_moon_1080.png" >
+<a href="info"><img id="moonglow" src="/images/moonglow_moonglow_1080.png"> </a>
 
-
-
-<h1 id="out">
-  lol
-</h1>
 
 
 <style>
@@ -22,16 +20,47 @@
     --x: 0px;
     --y: 0px;
 
+    --o: 0;
+
     position: absolute;
     width: 100%;
     height: 100%;
     left: var(--x);
     top: var(--y);
+    opacity: var(--o);
   }
 
-  #glow {
+  #stars {
     --x: 0px;
     --y: 0px;
+
+    --o: 0;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: var(--x);
+    top: var(--y);
+    opacity: var(--o);
+  }
+
+  #vignette {
+    --x: 0px;
+    --y: 0px;
+    --o: 1;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: var(--x);
+    top: var(--y);
+    opacity: var(--o);
+  }
+
+
+  #glow {
+    --x: 50%;
+    --y: 50%;
     --w: 0px;
     --h: 0px;
     position: absolute;
@@ -53,6 +82,18 @@
     left: var(--x);
     top: var(--y);
   }
+  #moonglow {
+    --x: 0px;
+    --y: 0px;
+    --o: 0;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: var(--x);
+    top: var(--y);
+    opacity: var(--o);
+  }
 
 
   body {
@@ -64,10 +105,15 @@
 
 
 <script>
-  const el = document.querySelector("#sun");
-  const el2 = document.querySelector("#moon");
-  const el3 = document.querySelector("#glow");
+  const sun = document.querySelector("#sun");
+  const stars = document.querySelector("#stars");
+  const moon = document.querySelector("#moon");
+  const glow = document.querySelector("#glow");
+  const moonglow = document.querySelector("#moonglow");
+  const vignette = document.querySelector("#vignette");
 
+  const background_move = 500;
+  const foreground_move = 3500;
 
   var width = window.innerWidth
           || document.documentElement.clientWidth
@@ -82,37 +128,63 @@
   var big = 60
   var px = 0
   var py = 0
+
   document.addEventListener("mousemove", (e) => {
 
+    console.log("hellooooo");
     px = (e.pageX/width-0.5)*2;
     py = (e.pageY/height-0.5)*2;
 
 
-    el.style.setProperty('--x', (px)*10 + "px");
-    el.style.setProperty('--y', (py)*10 + "px");
-    el2.style.setProperty('--x', (px)*35 + "px");
-    el2.style.setProperty('--y', (py)*35 + "px");
+    sun.style.setProperty('--x', (px)*background_move/width + "%");
+    sun.style.setProperty('--y', (py)*background_move/height + "%");
+    stars.style.setProperty('--x', (px)*background_move/width + "%");
+    stars.style.setProperty('--y', (py)*background_move/height + "%");
+    moon.style.setProperty('--x', (px)*foreground_move/width + "%");
+    moon.style.setProperty('--y', (py)*foreground_move/height + "%");
+    moonglow.style.setProperty('--x', (px)*foreground_move/width + "%");
+    moonglow.style.setProperty('--y', (py)*foreground_move/height + "%");
+    glow.style.setProperty('--x', (px)*background_move/width+50+"%");
+    glow.style.setProperty('--y', (py)*background_move/height+50+"%");
 
 
   });
 
+  var toggle = 1
+  document.addEventListener("keypress", (e)=>{
+
+    toggle ^= 1;
+
+  })
+  var curSun = 0
+  var curStars = 1
+  var opa = setInterval(()=>{
+    //Please note, this was done in a hurry, please redo this #TODO
+
+    curSun = ((1-toggle)+curSun*49)/50
+    curStars = (toggle+curStars*49)/50
+
+    sun.style.setProperty("--o", curSun);
+    stars.style.setProperty("--o",curStars);
+  },10);
+
+  const glowSize = 60;
 
   var anim = setInterval(()=>{
     count+=0.035; // Control the speed of animation here
 
-    size = 60*Math.sin(count%(2*Math.PI))
-
-    var tw = 140+size
-    var th= 140+size
-
-    el3.style.setProperty('--w', tw + "%")
-    el3.style.setProperty('--h', th + "%")
-
-    el3.style.setProperty('--x', (px)*35/width+50+"%");
-    el3.style.setProperty('--y', (py)*35/height+50+"%");
+    size = glowSize*Math.sin(count%(2*Math.PI))
 
 
-    document.getElementById("out").innerHTML = "count = " + count;
+    var o = (size+glowSize)/(glowSize*2);
+    var tw = 130+size
+    var th= 130+size
+
+    glow.style.setProperty('--w', tw + "%")
+    glow.style.setProperty('--h', th + "%")
+
+    moonglow.style.setProperty('--o', o);
+    vignette.style.setProperty('--o', 1-o);
 
 
   },10)
